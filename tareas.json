@@ -6,7 +6,7 @@
   },
   {
     "id": 2,
-    "isCompleted": false,
+    "isCompleted": true,
     "description": "Cocinar"
   },
   {
@@ -16,7 +16,7 @@
   },
   {
     "id": 4,
-    "isCompleted": false,
+    "isCompleted": true,
     "description": "lavar"
   }
 ]

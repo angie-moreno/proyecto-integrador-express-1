@@ -3,7 +3,23 @@ const router = express.Router();
 const tareas = require("./tareas.json");
 router.use(express.json());
 
-router.post("/tarea", (req, res) => {
+function bodyValidation(req, res, next) {
+  if (Object.values(req.body).length === 0) {
+    res.status(400).send("body no tiene información");
+  } else {
+    next();
+  }
+}
+function dataValidation(req, res, next) {
+  const { isCompleted, description } = req.body;
+  if (!isCompleted || !description) {
+    res.status(400).send("Falta información para crear la tarea");
+  } else {
+    next();
+  }
+}
+
+router.post("/tarea", bodyValidation, dataValidation, (req, res) => {
   const { isCompleted, description } = req.body;
   const id = tareas.length + 1;
   tareas.push({ id: id, isCompleted: isCompleted, description: description });
@@ -13,7 +29,7 @@ router.post("/tarea", (req, res) => {
   });
 });
 
-router.put("/tarea/:id", (req, res) => {
+router.put("/tarea/:id", bodyValidation, dataValidation, (req, res) => {
   const id = req.params.id;
   const { isCompleted, description } = req.body;
   const tarea = tareas.find((tarea) => tarea.id == id);

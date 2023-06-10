@@ -2,11 +2,21 @@ const express = require("express");
 const router = express.Router();
 const tareas = require("./tareas.json");
 
+function paramValidation(req, res, next) {
+  const idParam = req.params.id;
+  if (!idParam) {
+    res.status(400).send("Debes introducir el parámetro id");
+  } else {
+    next();
+  }
+}
+router.use(paramValidation);
+
 router.get("/tarea/:id", (req, res) => {
   const id = req.params.id;
-  const tarea = tareas.filter((tarea) => tarea.id == id);
-  if (tareas.length < id) {
-    res.status(404).send("tarea no encontrada");
+  const tarea = tareas.find((tarea) => tarea.id == id);
+  if (!tarea) {
+    res.status(404).send("Tarea no encontrada");
   } else {
     res.send({
       success: true,
@@ -39,7 +49,7 @@ router.get("/incompletas", (req, res) => {
   }
 });
 
-router.get("/tarea", (req, res) => {
+router.get("/tareas", (req, res) => {
   res.send({
     success: true,
     content: tareas,
